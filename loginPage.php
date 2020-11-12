@@ -1,89 +1,89 @@
 <?php
-// Initialize the session
+// Start Session
 session_start();
  
-// Check if the user is already logged in, if yes then redirect him to welcome page
+// Check If User Logged In, If Yes Send To Home Page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     header("location: home.php");
     exit;
 }
  
-// Include config file
+// Include Config File
 require_once "config.php";
  
-// Define variables and initialize with empty values
+// Define Variables And Start Empty
 $username = $password = "";
 $username_err = $password_err = "";
  
-// Processing form data when form is submitted
+// Processing Data From Form Upon Submission
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
-    // Check if username is empty
+    // Check if Username Is Empty
     if(empty(trim($_POST["username"]))){
         $username_err = "Please enter username.";
     } else{
         $username = trim($_POST["username"]);
     }
     
-    // Check if password is empty
+    // Check If Password Is Empty
     if(empty(trim($_POST["password"]))){
         $password_err = "Please enter your password.";
     } else{
         $password = trim($_POST["password"]);
     }
     
-    // Validate credentials
+    // Check Credentials
     if(empty($username_err) && empty($password_err)){
-        // Prepare a select statement
+        // Prepare A Select Statement
         $sql = "SELECT id, username, password FROM users WHERE username = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
+            // Bind Variables To The Prepared Statement As Parameters
             mysqli_stmt_bind_param($stmt, "s", $param_username);
             
             // Set parameters
             $param_username = $username;
             
-            // Attempt to execute the prepared statement
+            // Try To Execute Prepared Statement
             if(mysqli_stmt_execute($stmt)){
-                // Store result
+                // Store Result In Database Table
                 mysqli_stmt_store_result($stmt);
                 
-                // Check if username exists, if yes then verify password
+                // If Username Exists, Check Password As Well
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
-                    // Bind result variables
+                    // Bind Result Variables
                     mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
                     if(mysqli_stmt_fetch($stmt)){
                         if(password_verify($password, $hashed_password)){
-                            // Password is correct, so start a new session
+                            // Password Is Correct. Start New Session
                             session_start();
                             
-                            // Store data in session variables
+                            // Store Data In Session Variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;                            
                             
-                            // Sends user to homepage
+                            // Sends User To Home Page
                             header("location: home.php");
                         } else{
-                            // Display an error message if password is not valid
-                            $password_err = "The password you entered was not valid.";
+                            // Display An Error Message If Password Is Not Valid
+                            $password_err = "The Password You Entered Was Not Valid.";
                         }
                     }
                 } else{
-                    // Display an error message if username doesn't exist
-                    $username_err = "No account found with that username.";
+                    // Display Error Message When Username Doesn't Exist
+                    $username_err = "That Username Does't Exist";
                 }
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                echo "Error: Please Try Again";
             }
 
-            // Close statement
+            // Close Statement
             mysqli_stmt_close($stmt);
         }
     }
     
-    // Close connection
+    // Close Connection
     mysqli_close($link);
 }
 ?>

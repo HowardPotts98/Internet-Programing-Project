@@ -6,11 +6,11 @@ define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 define('DB_NAME', 'logindb');
  
-/* Attempt to connect to MySQL database */
+/* Connect To MySQL Database Attempt */
 $link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
  
 // Check connection
 if($link === false){
-    die("ERROR: Could not connect. " . mysqli_connect_error());
+    die("Error, No Connection Made " . mysqli_connect_error());
 }
 ?>

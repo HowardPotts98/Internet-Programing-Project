@@ -75,9 +75,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
             $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
             
-            // Set parameters
+            // Set Parameters
             $param_username = $username;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
+            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates Password Hash
             
             // Try To Execute Prepared Statement
             if($stmt->execute()){
@@ -87,12 +87,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 echo "Error Please Try Again.";
             }
 
-            // Close statement
+            // Close Statement
             unset($stmt);
         }
     }
     
-    // Close connection
+    // Close Connection
     unset($pdo);
 }
 ?>
