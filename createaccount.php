@@ -1,71 +1,77 @@
 <?php
-// Include config file
+// Include Config File
 require_once "config.php";
  
-// Define variables and initialize with empty values
+// Define Variables And Start With Empty Values
 $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
  
-// Processing form data when form is submitted
+// Processing Data When Submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
-    // Validate username
+  try{
+	$pdo = new PDO('mysql:host='. DB_SERVER.';dbname='. DB_NAME, DB_USERNAME, DB_PASSWORD);
+  }catch(PDOException $e){
+	  echo "connection failed";
+  }
+     //Check Username
     if(empty(trim($_POST["username"]))){
-        $username_err = "Please enter a username.";
+        $username_err = "Enter Your Username.";
     } else{
-        // Prepare a select statement
-        $sql = "SELECT id FROM users WHERE username = :username";
+        // Prepare A Select Statement
+        $sql = "SELECT username FROM users WHERE username = :username";
         
         if($stmt = $pdo->prepare($sql)){
-            // Bind variables to the prepared statement as parameters
+            // Bind Variables To Prepared Statement As Parameters
             $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
             
-            // Set parameters
+            // Set Parameters
             $param_username = trim($_POST["username"]);
             
-            // Attempt to execute the prepared statement
+            // Try To Execute Prepared Statement
             if($stmt->execute()){
                 if($stmt->rowCount() == 1){
-                    $username_err = "This username is already taken.";
+                    $username_err = "This username is already in use.";
                 } else{
                     $username = trim($_POST["username"]);
                 }
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                echo "Error Please Try Again";
             }
 
-            // Close statement
+            // Close Statement
             unset($stmt);
         }
     }
-    
-    // Validate password
+	
+    // Check password
     if(empty(trim($_POST["password"]))){
-        $password_err = "Please enter a password.";     
+        $password_err = "Password Is Required.";     
     } elseif(strlen(trim($_POST["password"])) < 5){
-        $password_err = "Password must have atleast 5 characters.";
+        $password_err = "Password Must Have At Least 5 Characters.";
     } else{
         $password = trim($_POST["password"]);
     }
     
-    // Validate confirm password
+    // Check With Confirm Password
     if(empty(trim($_POST["confirm_password"]))){
-        $confirm_password_err = "Please confirm password.";     
+        $confirm_password_err = "Verify Your Password.";     
     } else{
         $confirm_password = trim($_POST["confirm_password"]);
         if(empty($password_err) && ($password != $confirm_password)){
-            $confirm_password_err = "Password did not match.";
+            $confirm_password_err = "Password Was Not A Match.";
         }
     }
     
-    // Check input errors before inserting in database
+    // Check Errors Before Updating Database (insert)
     if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
         
-        // Prepare an insert statement
+        // Prepare An Insert Statement
         $sql = "INSERT INTO users (username, password) VALUES (:username, :password)";
-         
+         echo $param_username;
+		 
+		 echo "hello";
         if($stmt = $pdo->prepare($sql)){
-            // Bind variables to the prepared statement as parameters
+            // Bind Variables To The Prepared Statement As Parameters
             $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
             $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
             
@@ -73,12 +79,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
             
-            // Attempt to execute the prepared statement
+            // Try To Execute Prepared Statement
             if($stmt->execute()){
-                // Redirect to login page
-                header("location: login.php");
+                // Send To Login Page
+                header("location: loginPage.php");
             } else{
-                echo "Something went wrong. Please try again later.";
+                echo "Error Please Try Again.";
             }
 
             // Close statement
