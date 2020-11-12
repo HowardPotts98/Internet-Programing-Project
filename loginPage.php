@@ -35,10 +35,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check Credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare A Select Statement
-        $sql = "SELECT id, username, password FROM users WHERE username = ?";
+        $sql = "SELECT username, password FROM users WHERE username = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
-            // Bind Variables To The Prepared Statement As Parameters
+            // Set Var For Parameters
             mysqli_stmt_bind_param($stmt, "s", $param_username);
             
             // Set parameters
@@ -51,8 +51,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 
                 // If Username Exists, Check Password As Well
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
-                    // Bind Result Variables
-                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
+                    // Set Result Variables
+                    mysqli_stmt_bind_result($stmt, $username, $hashed_password);
                     if(mysqli_stmt_fetch($stmt)){
                         if(password_verify($password, $hashed_password)){
                             // Password Is Correct. Start New Session
@@ -60,7 +60,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             
                             // Store Data In Session Variables
                             $_SESSION["loggedin"] = true;
-                            $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;                            
                             
                             // Sends User To Home Page
