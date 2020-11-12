@@ -21,7 +21,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $sql = "SELECT username FROM users WHERE username = :username";
         
         if($stmt = $pdo->prepare($sql)){
-            // Bind Variables To Prepared Statement As Parameters
+            // Set Var For Parameters
             $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
             
             // Set Parameters
@@ -71,7 +71,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		 
 		 echo "hello";
         if($stmt = $pdo->prepare($sql)){
-            // Bind Variables To The Prepared Statement As Parameters
+            // Set Var For Parameters
             $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
             $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
             
