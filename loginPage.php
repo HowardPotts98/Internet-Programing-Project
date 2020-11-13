@@ -2,11 +2,6 @@
 // Start Session
 session_start();
  
-// Check If User Logged In, If Yes Send To Home Page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: home.php");
-    exit;
-}
  
 // Include Config File
 require_once "config.php";
