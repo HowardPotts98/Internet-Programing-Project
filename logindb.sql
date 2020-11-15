@@ -48,6 +48,28 @@ INSERT INTO `users` (`username`, `password`, `created_at`) VALUES
 ('timmy', '$2y$10$jjnnKXN2c9OcF/zadxwm2uekNDiXFwg0ow6p.0Goy5PD4HvRftiTS', '2020-11-13 13:24:31');
 COMMIT;
 
+
+--
+-- Table structure for table `msgchat`
+--
+DROP TABLE IF EXISTS `msgchat`;
+CREATE TABLE IF NOT EXISTS `msgchat` (
+  `username` varchar(45) NOT NULL,
+  `msg` varchar(225) NOT NULL,
+  `date` datetime DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`username`) REFERENCES users(`username`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+--
+-- Dumping data for table `msgchat`
+--
+
+INSERT INTO 'msgchat' (`username`, 'msg', 'date') VALUES
+('joe','Hello World', CURRENT_TIMESTAMP),
+('timmy','Hello World', CURRENT_TIMESTAMP)
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
