@@ -1,7 +1,7 @@
 <?php
 
     // Include config file
-   // include "config.php";
+    include "config.php";
  
 
 
@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="msgstyles.css" />
     <title>Compose a New Message</title>
 
+    <!-- 
+
     <script>
          function chat_ajax() { 
               var req = new XMLHttpRequest(); 
@@ -34,7 +36,7 @@
           
           setInterval(function(){chat_ajax()}, 1000) 
     </script>
-
+  -->
 
 
   </head>
